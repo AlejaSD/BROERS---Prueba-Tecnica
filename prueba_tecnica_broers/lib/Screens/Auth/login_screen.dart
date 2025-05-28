@@ -18,18 +18,46 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final _usernameController = TextEditingController();
   bool _isLoading = false;
+  bool _checkingSession = true;
 
   @override
   void initState() {
     super.initState();
     // Verificar auto-login al cargar la pantalla
-    //_checkAutoLogin();
+    _checkAutoLogin();
   }
 
   @override
   void dispose() {
     _usernameController.dispose();
     super.dispose();
+  }
+
+  Future<void> _checkAutoLogin() async {
+    try {
+      final autoLoginResult = await AuthService.autoLogin();
+
+      if (mounted) {
+        if (autoLoginResult.success && autoLoginResult.user != null) {
+          // Ya hay sesión, actualizar provider y redirigir
+          ref.read(authProvider.notifier).login(autoLoginResult.user!.username);
+
+          // Redirigir directamente a tareas
+          Navigator.of(context).pushReplacementNamed('/tasks');
+          return;
+        }
+      }
+    } catch (e) {
+      // Si hay error, continuar con login normal
+      print('Error en auto-login: $e');
+    } finally {
+      // Mostrar el formulario de login
+      if (mounted) {
+        setState(() {
+          _checkingSession = false;
+        });
+      }
+    }
   }
 
   Future<void> _handleLogin() async {
@@ -108,6 +136,16 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    if (_checkingSession) {
+      return Scaffold(
+        backgroundColor: AppColors.background,
+        body: const Center(
+          child: CircularProgressIndicator(
+            valueColor: AlwaysStoppedAnimation<Color>(AppColors.actionButton),
+          ),
+        ),
+      );
+    }
     return Scaffold(
       backgroundColor: AppColors.background,
       body: SafeArea(
