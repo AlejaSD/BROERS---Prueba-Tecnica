@@ -40,15 +40,18 @@ Este proyecto implementa **Clean Architecture** combinada con **patrones MVVM** 
 
 ### Pantalla de Login
 
-![alt text](image.png)
+![image](https://github.com/user-attachments/assets/64db1c36-aac2-4860-8c79-88c0984687cb)
+
 
 ### Pantalla Principal (Home)
 
-![alt text](image-1.png)
+![image](https://github.com/user-attachments/assets/7b5e35f1-8c9d-41cc-8b85-94e2ef759d53)
+
 
 ### Pantalla de Detalles de Tarea
 
-![alt text](image-2.png)
+![image](https://github.com/user-attachments/assets/1f5cd9ed-5631-43f5-b961-aee33970f104)
+
 
 ---
 
